@@ -10,24 +10,39 @@
 #import "WXMErrorStatusView.h"
 
 @implementation UIView (WXMErrorStatusView)
-- (void)showErrorStatusViewWithType:(WXMErrorStatusType)errorType {
-    [self hidenErrorStatusView];
+- (void)we_showErrorStatusViewWithType:(WXMErrorStatusType)errorType {
+    [self we_hidenErrorStatusView];
     if (errorType == WXMErrorStatusTypeNormal) return;
     WXMErrorStatusView *error = [WXMErrorStatusView wxm_errorsViewWithType:errorType];
     [self addSubview:error];
 }
 
-- (void)hidenErrorStatusView {
+- (void)we_showErrorRefreshStatusViewWithType:(WXMErrorStatusType)errorType {
+    [self we_hidenErrorStatusView];
+    if (errorType == WXMErrorStatusTypeNormal) return;
+    WXMErrorStatusView *error = [WXMErrorStatusView wxm_errorsViewWithType:errorType
+                                                             interfaceType:WXMErrorFaceTypeRefresh];
+    [self addSubview:error];
+}
+
+- (void)we_hidenErrorStatusView {
      [[self viewWithTag:WXM_ErrorSign] removeFromSuperview];
 }
+
 @end
 
 @implementation UIViewController (WXMErrorStatusView)
-- (void)showErrorStatusViewWithType:(WXMErrorStatusType)errorType {
-    [self.view showErrorStatusViewWithType:errorType];
+
+- (void)we_showErrorStatusViewWithType:(WXMErrorStatusType)errorType {
+    [self.view we_showErrorStatusViewWithType:errorType];
 }
-- (void)hidenErrorStatusView {
-    [self.view hidenErrorStatusView];
+
+- (void)we_showErrorRefreshStatusViewWithType:(WXMErrorStatusType)errorType {
+     [self.view we_showErrorRefreshStatusViewWithType:errorType ];
+}
+
+- (void)we_hidenErrorStatusView {
+    [self.view we_hidenErrorStatusView];
 }
 @end
 

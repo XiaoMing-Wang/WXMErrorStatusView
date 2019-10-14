@@ -8,7 +8,6 @@
 #define WXM_SWidth [UIScreen mainScreen].bounds.size.width
 #define WXM_SHeight [UIScreen mainScreen].bounds.size.height
 #import "WXMErrorStatusView.h"
-
 @interface WXMErrorStatusView ()
 @property(nonatomic, strong) UIActivityIndicatorView *refrshIndicator;
 @end
@@ -44,6 +43,7 @@
 + (WXMErrorStatusView *)wxm_errorsViewWithType:(WXMErrorStatusType)type {
     return [self wxm_errorsViewWithType:type interfaceType:WXMErrorFaceTypeDefault];
 }
+
 + (WXMErrorStatusView *)wxm_errorsViewWithType:(WXMErrorStatusType)type
                                  interfaceType:(WXMErrorStatusInterfaceType)interfaceType {
     if (type == WXMErrorStatusTypeNormal) return nil;
@@ -55,14 +55,12 @@
     return statusView;
 }
 
-/**  */
 - (void)setupInterface {
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.backgroundColor = WXM_BackgroundColor;
     
     if (self.errorType == WXMErrorStatusTypeRequestLoading) {
         _indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:2];
-    /** _indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite; */
         [_indicatorView startAnimating];
         [self addSubview:_indicatorView];
         [self wxm_modifyCoordinate];
@@ -71,7 +69,7 @@
         
         UIImage *image = self.currentImage;
         CGFloat oldWidth = image.size.width;
-        if (oldWidth > (WXM_SWidth - 120)) oldWidth = WXM_SWidth - 120;
+        if (oldWidth > WXM_FixedWidth) oldWidth = WXM_FixedWidth;
         CGFloat imgHeight = (image.size.height / image.size.width) * oldWidth;
         
         /** 自定义图片大小 */
@@ -80,13 +78,13 @@
             imgHeight = WXM_IMGSize.height;
         }
         
-        _erroeImgVC = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0,oldWidth, imgHeight)];
+        _erroeImgVC = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, oldWidth, imgHeight)];
         _erroeImgVC.image = image;
         
         _errorMsg = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
         _errorMsg.textAlignment = NSTextAlignmentCenter;
         _errorMsg.text = self.currentMessage;
-        _errorMsg.font = [UIFont systemFontOfSize:14];
+        _errorMsg.font = [UIFont systemFontOfSize:16];
         _errorMsg.textColor = WXM_TextColor;
         _errorMsg.numberOfLines = 1;
         
@@ -125,7 +123,7 @@
         self.indicatorView.center = CGPointMake(superWidth / 2, superHeight / 2);
         [self.indicatorView startAnimating];
         
-    } else if (self.errorType == WXMErrorStatusTypeNormal) {  return;
+    } else if (self.errorType == WXMErrorStatusTypeNormal) {  
     } else {
         BOOL refresh = (self.interfaceType == WXMErrorFaceTypeRefresh);
         [_errorMsg sizeToFit];
@@ -146,7 +144,7 @@
         CGRect icatorFrame = _refrshIndicator.frame;
         
         imgFrame.origin.y = top;
-        msgFrame.origin.y = top + imgFrame.size.height;
+        msgFrame.origin.y = top + imgFrame.size.height + WXM_MSGOffset;
         refreshFrame.origin.y = msgFrame.origin.y + msgFrame.size.height + 25;
         refreshFrame.origin.x = WXM_RefreshMargin;
         refreshFrame.size.width = superWidth - 2 * WXM_RefreshMargin;
@@ -184,7 +182,7 @@
     if (success) {
         [UIView animateWithDuration:0.25 animations:^{
             self.alpha = 0;
-        } completion:^(BOOL finished) {  [self removeFromSuperview]; }];
+        } completion:^(BOOL finished) { [self removeFromSuperview]; }];
     } else {
         _refreshControl.userInteractionEnabled = YES;
         [_refrshIndicator removeFromSuperview];
@@ -204,7 +202,6 @@
     }
 }
 
-/**  */
 - (void)wxm_addTarget:(id)target selector:(SEL)sel {
     if (self.interfaceType == WXMErrorFaceTypeDefault) {
         [self addTarget:target action:sel forControlEvents:UIControlEventTouchUpInside];
@@ -213,7 +210,6 @@
     }
 }
 
-/** */
 - (void)wxm_touchUpInside {
     if (self.callBack) self.callBack();
     [self wxm_refreshControlStartAnimation];
@@ -235,9 +231,9 @@
     BOOL refresh = (interfaceType == WXMErrorFaceTypeRefresh);
     CGFloat incremental = refresh ? 60 : 0;
     if (CGSizeEqualToSize(WXM_IMGSize, CGSizeZero) == NO) {
-        return WXM_MinH + WXM_IMGSize.height + 20 + incremental;
+        return WXM_MinH + WXM_IMGSize.height + 20 + incremental + WXM_MSGOffset;
     }
-    return WXM_MinH + ((WXM_SWidth - 120) * 1.1) + 20 + incremental;
+    return WXM_MinH + (WXM_FixedWidth * 1.1) + 20 + incremental + WXM_MSGOffset;
 }
 
 - (void)didMoveToSuperview {
