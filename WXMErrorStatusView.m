@@ -171,7 +171,6 @@
 - (void)refreshControlStartAnimation {
     if (self.interfaceType == WXMErrorFaceTypeDefault) {
         [_refrshIndicator startAnimating];
-        _refrshIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
         [self addSubview:_refrshIndicator];
         
     } else if (self.interfaceType == WXMErrorFaceTypeRefresh) {

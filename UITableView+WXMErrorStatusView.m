@@ -59,14 +59,15 @@
         [self hidenErrorStatusView];
     } else {
         BOOL network = self.internetStatusnetwork;
-        BOOL success = self.requestSuccess;
+        BOOL fail = self.requestFail;
         if (network == NO) {
             [self showErrorStatusViewWithType:WXMErrorStatusTypeBadNetwork];
-        } else if (network && success) {
+        } else if (network && !fail) {
             [self showErrorStatusViewWithType:WXMErrorStatusTypeNorecord];
-        }  else if (network && !success) {
+        }  else if (network && fail) {
             [self showErrorStatusViewWithType:WXMErrorStatusTypeRequestFail];
         }
+        self.requestFail = NO;
     }
 }
 
@@ -126,13 +127,13 @@
     return [objc_getAssociatedObject(self, _cmd) boolValue];
 }
 
-- (void)setRequestSuccess:(BOOL)requestSuccess {
-    NSNumber *number = @(requestSuccess);
-    SEL sel = @selector(requestSuccess);
+- (void)setRequestFail:(BOOL)requestFail {
+    NSNumber *number = @(requestFail);
+    SEL sel = @selector(requestFail);
     objc_setAssociatedObject(self, sel, number,OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (BOOL)requestSuccess {
+- (BOOL)requestFail {
     return [objc_getAssociatedObject(self, _cmd) boolValue];
 }
 

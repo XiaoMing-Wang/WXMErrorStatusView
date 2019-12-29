@@ -6,6 +6,7 @@
 //  Copyright © 2019 wxm. All rights reserved.
 //
 #import <UIKit/UIKit.h>
+#import "UIView+WXMErrorStatusView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,8 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 /** 自动管理空视图 默认NO */
 @property (nonatomic, assign) BOOL automaticManagement;
 
-/** 请求是否成功 */
-@property (nonatomic, assign) BOOL requestSuccess;
+/** 请求是否失败 */
+@property (nonatomic, assign) BOOL requestFail;
 
 /** 开始加载 */
 - (void)startLoading;
