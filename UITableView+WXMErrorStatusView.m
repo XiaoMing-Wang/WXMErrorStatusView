@@ -56,7 +56,7 @@
 - (void)getDataSources {
     NSInteger tableCount = self.totalDataCount;
     if (tableCount > 0) {
-        [self showErrorStatusViewWithType:WXMErrorStatusTypeNormal];
+        [self hidenErrorStatusView];
     } else {
         BOOL network = self.internetStatusnetwork;
         BOOL success = self.requestSuccess;
