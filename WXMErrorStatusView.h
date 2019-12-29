@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UIView+WXMErrorStatusView.h"
+#import " WXMErrorConfiguration.h"
 
 @interface WXMErrorStatusView : UIControl
 @property(nonatomic, assign) WXMErrorStatusType errorType;
@@ -26,13 +27,13 @@
 + (CGFloat)minHeightWithType:(WXMErrorStatusInterfaceType)interfaceType;
 
 /** 刷新按钮 */
-- (void)wxm_refreshControlStartAnimation;
-- (void)wxm_refreshControlStopAnimation:(BOOL)success;
+- (void)refreshControlStartAnimation;
+- (void)refreshControlStopAnimation:(BOOL)success;
 
 /** 添加回调 */
-- (void)wxm_addTarget:(id)target selector:(SEL)sel;
+- (void)addTarget:(id)target selector:(SEL)sel;
 
-+ (WXMErrorStatusView *)wxm_errorsViewWithType:(WXMErrorStatusType)type;
-+ (WXMErrorStatusView *)wxm_errorsViewWithType:(WXMErrorStatusType)type
-                                 interfaceType:(WXMErrorStatusInterfaceType)interfaceType;
++ (WXMErrorStatusView *)errorsViewWithType:(WXMErrorStatusType)type;
++ (WXMErrorStatusView *)errorsViewWithType:(WXMErrorStatusType)type
+                             interfaceType:(WXMErrorStatusInterfaceType)interfaceType;
 @end

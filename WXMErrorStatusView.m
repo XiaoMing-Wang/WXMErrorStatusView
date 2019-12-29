@@ -20,9 +20,9 @@
     NSString * imageName = @"";
     switch (self.errorType) {
         case WXMErrorStatusTypeNormal:imageName = @""; break;
-        case WXMErrorStatusTypeBadNetwork:imageName = @"ic_default4"; break;
-        case WXMErrorStatusTypeNorecord: imageName = @"ic_default1";  break;
-        case WXMErrorStatusTypeRequestFail: imageName = @"ic_default2";  break;
+        case WXMErrorStatusTypeBadNetwork:imageName = @"refreshtableview_nonetwork"; break;
+        case WXMErrorStatusTypeNorecord: imageName = @"refreshtableview_defaultnodata";  break;
+        case WXMErrorStatusTypeRequestFail: imageName = @"refreshtableview_requesterror";  break;
         default: break;
     }
     return [UIImage imageNamed:imageName] ?: nil;
@@ -41,38 +41,38 @@
     return messsage;
 }
 
-+ (WXMErrorStatusView *)wxm_errorsViewWithType:(WXMErrorStatusType)type {
-    return [self wxm_errorsViewWithType:type interfaceType:WXMErrorFaceTypeDefault];
++ (WXMErrorStatusView *)errorsViewWithType:(WXMErrorStatusType)type {
+    return [self errorsViewWithType:type interfaceType:WXMErrorFaceTypeDefault];
 }
-+ (WXMErrorStatusView *)wxm_errorsViewWithType:(WXMErrorStatusType)type
-                                 interfaceType:(WXMErrorStatusInterfaceType)interfaceType {
+
++ (WXMErrorStatusView *)errorsViewWithType:(WXMErrorStatusType)type
+                             interfaceType:(WXMErrorStatusInterfaceType)interfaceType {
     if (type == WXMErrorStatusTypeNormal) return nil;
     WXMErrorStatusView *statusView = [WXMErrorStatusView new];
     statusView.errorType = type;
     statusView.interfaceType = interfaceType;
     statusView.tag = WXM_ErrorSign;
-    [statusView setupInterface];
+    [statusView initializeInterface];
     return statusView;
 }
 
-/**  */
-- (void)setupInterface {
+- (void)initializeInterface {
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.backgroundColor = WXM_BackgroundColor;
     
     if (self.errorType == WXMErrorStatusTypeRequestLoading) {
         _indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:2];
-    /** _indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite; */
+        _indicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
         [_indicatorView startAnimating];
         [self addSubview:_indicatorView];
-        [self wxm_modifyCoordinate];
+        [self modifyCoordinate];
         
     } else {
         
         UIImage *image = self.currentImage;
         CGFloat oldWidth = image.size.width;
         if (oldWidth > (WXM_SWidth - 120)) oldWidth = WXM_SWidth - 120;
-        CGFloat imgHeight = (image.size.height / image.size.width) * oldWidth;
+        CGFloat imgHeight = (image.size.height / image.size.width) *oldWidth;
         
         /** 自定义图片大小 */
         if (CGSizeEqualToSize(WXM_IMGSize, CGSizeZero) == NO) {
@@ -80,66 +80,73 @@
             imgHeight = WXM_IMGSize.height;
         }
         
-        _erroeImgVC = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0,oldWidth, imgHeight)];
+        _erroeImgVC = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0,oldWidth,imgHeight)];
         _erroeImgVC.image = image;
         
         _errorMsg = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
         _errorMsg.textAlignment = NSTextAlignmentCenter;
         _errorMsg.text = self.currentMessage;
-        _errorMsg.font = [UIFont systemFontOfSize:14];
+        _errorMsg.font = [UIFont systemFontOfSize:15];
         _errorMsg.textColor = WXM_TextColor;
         _errorMsg.numberOfLines = 1;
         
+        SEL sel = @selector(touchUpInside);
         _refreshControl = [[UIButton alloc] init];
-        _refreshControl.frame = CGRectMake(0, 0, 0, 45);
+        _refreshControl.frame = CGRectMake(0, 0, 0, 30);
         [_refreshControl setBackgroundColor:WXM_RefreshBgcolor];
         [_refreshControl setTitleColor:WXM_RefreshTextcolor forState:UIControlStateNormal];
         [_refreshControl setTitle:WXM_RefreshText forState:UIControlStateNormal];
         _refreshControl.layer.cornerRadius = WXM_RefreshCornerRadius;
-        _refreshControl.titleLabel.font = [UIFont systemFontOfSize:16];
+        _refreshControl.layer.borderColor = WXM_RefreshTextcolor.CGColor;
+        _refreshControl.layer.borderWidth = 0.5;
+        _refreshControl.titleLabel.font = [UIFont systemFontOfSize:12];
         _refreshControl.hidden = (_interfaceType != WXMErrorFaceTypeRefresh);
-        SEL sel = @selector(wxm_touchUpInside);
         [_refreshControl addTarget:self action:sel forControlEvents:UIControlEventTouchUpInside];
         
         _refrshIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:2];
         _refrshIndicator.hidesWhenStopped = YES;
         _refrshIndicator.hidden = YES;
-        _refrshIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
+        _refrshIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
         
         [self addSubview:_erroeImgVC];
         [self addSubview:_errorMsg];
         [self addSubview:_refreshControl];
         [self addSubview:_refrshIndicator];
-        [self wxm_modifyCoordinate];
+        [self modifyCoordinate];
     }
 }
 
 /** 更新frame */
-- (void)wxm_modifyCoordinate {
+- (void)modifyCoordinate {
     if (!self.superview) return;
     CGFloat superWidth = self.superview.frame.size.width;
     CGFloat superHeight = self.superview.frame.size.height;
-    
+    superHeight = MIN(superHeight, WXM_SHeight);
+       
     if (self.errorType == WXMErrorStatusTypeRequestLoading) {
         self.frame = CGRectMake(0, 0, superWidth, superHeight);
         self.indicatorView.center = CGPointMake(superWidth / 2, superHeight / 2);
         [self.indicatorView startAnimating];
-        
-    } else if (self.errorType == WXMErrorStatusTypeNormal) {  return;
+    } else if (self.errorType == WXMErrorStatusTypeNormal) {
     } else {
-        BOOL refresh = (self.interfaceType == WXMErrorFaceTypeRefresh);
         [_errorMsg sizeToFit];
         _erroeImgVC.center = CGPointMake(superWidth / 2, _erroeImgVC.center.y);
         _errorMsg.center = CGPointMake(superWidth / 2, _errorMsg.center.y);
         _refrshIndicator.center = CGPointMake(superWidth / 2, 0);
         
+        BOOL refresh = (self.interfaceType == WXMErrorFaceTypeRefresh);
         CGFloat refresH = refresh ? 45 + 15 : 0;
-        CGFloat minH = WXM_MinH + _erroeImgVC.frame.size.height + _errorMsg.frame.size.height + refresH;
+        CGFloat imageH = _erroeImgVC.frame.size.height;
+        CGFloat msgH = _errorMsg.frame.size.height;
+        
+        CGFloat minH = WXM_MinH + imageH + msgH + refresH;
         CGFloat realH = MAX(minH, superHeight);
         
-        CGFloat blank = realH - _erroeImgVC.frame.size.height - _errorMsg.frame.size.height - refresH;
+        CGFloat blank = realH - imageH - msgH - refresH;
         CGFloat top = (blank - 10) / 2.0 + WXM_Offset;
-        if (_interfaceType == WXMErrorFaceTypeRefresh) top = (blank - 10) / 2.0 + WXM_OffsetRefresh;
+        if (_interfaceType == WXMErrorFaceTypeRefresh) {
+            top = (blank - 10) / 2.0 + WXM_OffsetRefresh;
+        }
         CGRect imgFrame = _erroeImgVC.frame;
         CGRect msgFrame = _errorMsg.frame;
         CGRect refreshFrame = _refreshControl.frame;
@@ -147,9 +154,9 @@
         
         imgFrame.origin.y = top;
         msgFrame.origin.y = top + imgFrame.size.height;
-        refreshFrame.origin.y = msgFrame.origin.y + msgFrame.size.height + 25;
-        refreshFrame.origin.x = WXM_RefreshMargin;
-        refreshFrame.size.width = superWidth - 2 * WXM_RefreshMargin;
+        refreshFrame.origin.y = msgFrame.origin.y + msgFrame.size.height + 18;
+        refreshFrame.origin.x = (superWidth - WXM_RefreshWidth) / 2.0;
+        refreshFrame.size.width = WXM_RefreshWidth;
         icatorFrame.origin.y = refreshFrame.origin.y;
         
         _erroeImgVC.frame = imgFrame;
@@ -161,34 +168,30 @@
 }
 
 /** 刷新开始 */
-- (void)wxm_refreshControlStartAnimation {
+- (void)refreshControlStartAnimation {
     if (self.interfaceType == WXMErrorFaceTypeDefault) {
         [_refrshIndicator startAnimating];
         _refrshIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
         [self addSubview:_refrshIndicator];
         
     } else if (self.interfaceType == WXMErrorFaceTypeRefresh) {
-        [_refreshControl setTitle:@"" forState:UIControlStateNormal];
+               
+        _refreshControl.hidden = YES;
         [_refrshIndicator startAnimating];
-        [_refreshControl addSubview:_refrshIndicator];
-        _refreshControl.userInteractionEnabled = NO;
-        
-        CGFloat w = _refreshControl.frame.size.width;
-        CGFloat h = _refreshControl.frame.size.height;
-        _refrshIndicator.center = CGPointMake(w / 2, h / 2);
+        _refrshIndicator.center = _refreshControl.center;
+        [self addSubview:_refrshIndicator];
     }
 }
 
 /** 结束刷新 */
-- (void)wxm_refreshControlStopAnimation:(BOOL)success {
+- (void)refreshControlStopAnimation:(BOOL)success {
     if (success) {
         [UIView animateWithDuration:0.25 animations:^{
             self.alpha = 0;
-        } completion:^(BOOL finished) {  [self removeFromSuperview]; }];
+        } completion:^(BOOL finished) { [self removeFromSuperview]; }];
     } else {
-        _refreshControl.userInteractionEnabled = YES;
+        _refreshControl.hidden = NO;
         [_refrshIndicator removeFromSuperview];
-        [_refreshControl setTitle:WXM_RefreshText forState:UIControlStateNormal];
     }
 }
 
@@ -196,7 +199,7 @@
 - (void)setFullScreenRefresh:(BOOL)fullScreenRefresh {
     _fullScreenRefresh = fullScreenRefresh;
     if (self.interfaceType == WXMErrorFaceTypeRefresh) return;
-    SEL sel = @selector(wxm_touchUpInside);
+    SEL sel = @selector(touchUpInside);
     if (fullScreenRefresh) {
         [self addTarget:self action:sel forControlEvents:UIControlEventTouchUpInside];
     } else {
@@ -204,19 +207,17 @@
     }
 }
 
-/**  */
-- (void)wxm_addTarget:(id)target selector:(SEL)sel {
+- (void)addTarget:(id)target selector:(SEL)sel {
     if (self.interfaceType == WXMErrorFaceTypeDefault) {
         [self addTarget:target action:sel forControlEvents:UIControlEventTouchUpInside];
-    }else if (self.interfaceType == WXMErrorFaceTypeRefresh) {
+    } else if (self.interfaceType == WXMErrorFaceTypeRefresh) {
         [_refreshControl addTarget:target action:sel forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
-/** */
-- (void)wxm_touchUpInside {
+- (void)touchUpInside {
     if (self.callBack) self.callBack();
-    [self wxm_refreshControlStartAnimation];
+    [self refreshControlStartAnimation];
 }
 
 /** 设置类型 */
@@ -228,7 +229,7 @@
         [self removeFromSuperview];
         return;
     }
-    [self wxm_modifyCoordinate];
+    [self modifyCoordinate];
 }
 
 + (CGFloat)minHeightWithType:(WXMErrorStatusInterfaceType)interfaceType {
@@ -241,6 +242,6 @@
 }
 
 - (void)didMoveToSuperview {
-    if (self.superview) [self wxm_modifyCoordinate];
+    if (self.superview) [self modifyCoordinate];
 }
 @end
