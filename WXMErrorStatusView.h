@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UIView+WXMErrorStatusView.h"
-#import " WXMErrorConfiguration.h"
+#import "WXMErrorConfiguration.h"
 
 @interface WXMErrorStatusView : UIControl
 @property (nonatomic, assign) WXMErrorStatusType errorType;
