@@ -8,7 +8,7 @@
 
 
 #import <UIKit/UIKit.h>
-#import " WXMErrorConfiguration.h"
+#import "WXMErrorConfiguration.h"
 
 @class WXMErrorStatusView;
 @interface UIView (WXMErrorStatusView)
