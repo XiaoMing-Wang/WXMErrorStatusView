@@ -15,6 +15,7 @@
 
 /** 全屏点击刷新 */
 @property (nonatomic, assign) BOOL fullScreenRefresh;
+@property (nonatomic, assign) BOOL sameSupViewColor;
 
 - (void)showErrorStatusViewWithType:(WXMErrorStatusType)errorType;
 - (void)showErrorStatusViewWithInterface:(WXMErrorStatusType)errorType;

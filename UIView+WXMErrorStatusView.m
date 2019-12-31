@@ -8,6 +8,7 @@
 
 #import "UIView+WXMErrorStatusView.h"
 #import "WXMErrorStatusView.h"
+#import <objc/runtime.h>
 
 @implementation UIView (WXMErrorStatusView)
 @dynamic fullScreenRefresh;
@@ -16,6 +17,7 @@
     [self hidenErrorStatusView];
     if (errorType == WXMErrorStatusTypeNormal) return;
     WXMErrorStatusView *error = [WXMErrorStatusView errorsViewWithType:errorType];
+    if (self.sameSupViewColor) error.backgroundColor = self.backgroundColor;
     [self addSubview:error];
 }
 
@@ -23,11 +25,16 @@
     [self hidenErrorStatusView];
     if (errorType == WXMErrorStatusTypeNormal) return;
     WXMErrorStatusView *error = [WXMErrorStatusView errorsViewWithType:errorType interfaceType:WXMErrorFaceTypeRefresh];
+    if (self.sameSupViewColor) error.backgroundColor = self.backgroundColor;
     [self addSubview:error];
 }
 
 - (void)hidenErrorStatusView {
-    [[self viewWithTag:WXM_ErrorSign] removeFromSuperview];
+    WXMErrorStatusView *error = [self errorStatusView];
+    CGFloat duation = (error.errorType == WXMErrorStatusTypeRequestLoading) ? 0.10 : 0;
+    [UIView animateWithDuration:duation animations:^{
+        error.alpha = 0;
+    } completion:^(BOOL finished) { [error removeFromSuperview];}];
 }
 
 - (WXMErrorStatusView *)errorStatusView {
@@ -58,6 +65,16 @@
 - (void)setFullScreenRefresh:(BOOL)fullScreenRefresh {
     WXMErrorStatusView *errorView = self.errorStatusView;
     [errorView setFullScreenRefresh:fullScreenRefresh];
+}
+
+- (void)setSameSupViewColor:(BOOL)sameSupViewColor {
+    NSNumber *number = @(sameSupViewColor);
+    SEL sel = @selector(sameSupViewColor);
+    objc_setAssociatedObject(self, sel, number,OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)sameSupViewColor {
+    return [objc_getAssociatedObject(self, _cmd) boolValue];
 }
 
 @end

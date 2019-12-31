@@ -29,7 +29,7 @@
 
 #define WXM_IMGSize CGSizeZero  /* CGSizeMake(10, 10) CGSizeZero */
 
-#define WXM_BackgroundColor WXM_ERGBColor(248, 248, 248)
+#define WXM_BackgroundColor WXM_ERGBColor(245, 245, 245)
 #define WXM_TextColor WXM_ERGBColor(88, 88, 88)
 #define WXM_RefreshTextcolor WXM_ERGBColor(99, 99, 99)
 #define WXM_RefreshBgcolor WXM_BackgroundColor
