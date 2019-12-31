@@ -26,8 +26,6 @@
 
 /** 设置刷新回调 */
 - (void)we_setRefreshCallback:(void (^)(void))callback;
-
-/** 添加回调 */
 - (void)we_addErrorStatusTarget:(id)target selector:(SEL)sel;
 
 /** 开始刷新和刷新结果 */
