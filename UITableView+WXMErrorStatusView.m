@@ -11,6 +11,7 @@
 #import <objc/runtime.h>
 #import <netinet/in.h>
 
+static char firstLoad;
 @implementation UITableView (WXMErrorStatusView)
 
 + (void)load {

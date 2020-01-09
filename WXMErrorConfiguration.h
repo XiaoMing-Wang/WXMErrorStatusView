@@ -21,7 +21,6 @@
 /** 有按钮垂直偏移 */
 #define WXM_OffsetRefresh -35
 
-
 #define WXM_RefreshWidth 120
 
 #define WXM_RefreshCornerRadius 3
