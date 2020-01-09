@@ -74,7 +74,9 @@ static char firstLoad;
 
 - (void)we_reloadData {
     [self we_reloadData];
-    if (self.automaticManagement) [self getDataSources];
+    id object = objc_getAssociatedObject(self, &firstLoad);
+    if (self.automaticManagement && object) [self getDataSources];
+    objc_setAssociatedObject(self, &firstLoad, @(1), OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 /**  section */

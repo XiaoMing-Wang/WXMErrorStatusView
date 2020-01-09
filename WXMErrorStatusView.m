@@ -34,7 +34,7 @@
     switch (self.errorType) {
         case WXMErrorStatusTypeNormal:messsage = @""; break;
         case WXMErrorStatusTypeBadNetwork:messsage = @"网络异常"; break;
-        case WXMErrorStatusTypeNorecord: messsage = @"暂无更多记录";  break;
+        case WXMErrorStatusTypeNorecord: messsage = @"暂无数据";  break;
         case WXMErrorStatusTypeRequestFail: messsage = @"数据加载失败"; break;
         default: break;
     }
@@ -125,7 +125,7 @@
        
     if (self.errorType == WXMErrorStatusTypeRequestLoading) {
         self.frame = CGRectMake(0, 0, superWidth, superHeight);
-        self.indicatorView.center = CGPointMake(superWidth / 2, superHeight / 2);
+        self.indicatorView.center = CGPointMake(superWidth / 2, superHeight / 2 + WXM_Offset);
         [self.indicatorView startAnimating];
     } else if (self.errorType == WXMErrorStatusTypeNormal) {
     } else {
