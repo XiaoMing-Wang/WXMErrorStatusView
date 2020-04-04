@@ -25,6 +25,7 @@
     error.we_yOffset = self.we_yOffset;
     error.we_backGroundColor = self.we_backGroundColor;
     error.we_refreshCallback = self.we_refreshCallback;
+    error.we_fullScreenRefresh = self.we_fullScreenRefresh;
     [self addSubview:error];
 }
 
@@ -39,6 +40,7 @@
     error.we_yOffset = self.we_yOffset;
     error.we_backGroundColor = self.we_backGroundColor;
     error.we_refreshCallback = self.we_refreshCallback;
+    error.we_fullScreenRefresh = self.we_fullScreenRefresh;
     [self addSubview:error];
 }
 
@@ -71,7 +73,11 @@
 }
 
 - (void)setWe_fullScreenRefresh:(BOOL)we_fullScreenRefresh {
-    [self.errorStatusView setFullScreenRefresh:we_fullScreenRefresh];
+    objc_setAssociatedObject(self, @selector(we_fullScreenRefresh), @(we_fullScreenRefresh), 3);
+}
+
+- (BOOL)we_fullScreenRefresh {
+    return [objc_getAssociatedObject(self, _cmd) boolValue];
 }
 
 - (void)setWe_refreshCallback:(void (^)(void))we_refreshCallback {

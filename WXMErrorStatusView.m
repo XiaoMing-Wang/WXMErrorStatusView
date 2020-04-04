@@ -10,6 +10,7 @@
 #import "WXMErrorStatusView.h"
 
 @interface WXMErrorStatusView ()
+@property (nonatomic, assign) BOOL loading;
 @property(nonatomic, strong) UIActivityIndicatorView *refrshIndicator;
 @end
 
@@ -180,13 +181,16 @@
         self.frame = CGRectMake(0, self.we_yOffset, superWidth, realH);
     }
     
+    self.fullScreenRefresh = self.we_fullScreenRefresh;
     if (self.we_backGroundColor) self.backgroundColor = self.we_backGroundColor;
 }
 
 /** 刷新开始 */
 - (void)refreshControlStartAnimation {
     
+    self.loading = YES;
     if (self.interfaceType == WXMErrorFaceTypeDefault) {
+        
         [_refrshIndicator startAnimating];
         [self addSubview:_refrshIndicator];
         
@@ -203,6 +207,7 @@
 /** 结束刷新 */
 - (void)refreshControlStopSuccess:(BOOL)success {
     
+    self.loading = NO;
     if (success) {
         
         [UIView animateWithDuration:0.25 animations:^{
@@ -210,6 +215,7 @@
         } completion:^(BOOL finished) { [self removeFromSuperview]; }];
         
     } else {
+        
         _refreshControl.hidden = NO;
         [_refrshIndicator removeFromSuperview];
     }
@@ -221,6 +227,7 @@
     _fullScreenRefresh = fullScreenRefresh;
     if (self.interfaceType == WXMErrorFaceTypeRefresh) return;
     SEL sel = @selector(touchUpInside);
+    
     if (fullScreenRefresh) {
         [self addTarget:self action:sel forControlEvents:UIControlEventTouchUpInside];
     } else {
@@ -230,6 +237,7 @@
 }
 
 - (void)addTarget:(id)target selector:(SEL)sel {
+    
     if (self.interfaceType == WXMErrorFaceTypeDefault) {
         
         [self addTarget:target action:sel forControlEvents:UIControlEventTouchUpInside];
@@ -241,6 +249,7 @@
 }
 
 - (void)touchUpInside {
+    if (self.loading) return;
     if (self.we_refreshCallback) self.we_refreshCallback();
     [self refreshControlStartAnimation];
 }
