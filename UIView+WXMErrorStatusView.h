@@ -33,7 +33,6 @@
 - (void)showErrorStatusViewWithInterface:(WXMErrorStatusType)errorType;
 - (void)hidenErrorStatusView;
 
-/** 设置刷新回调 */
 - (void)we_addErrorStatusTarget:(id)target selector:(SEL)sel;
 - (void)we_refreshControlStartAnimation;
 - (void)we_refreshControlStopSuccess:(BOOL)success;

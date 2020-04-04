@@ -207,9 +207,7 @@
         
         [UIView animateWithDuration:0.25 animations:^{
             self.alpha = 0;
-        } completion:^(BOOL finished) {
-            [self removeFromSuperview];
-        }];
+        } completion:^(BOOL finished) { [self removeFromSuperview]; }];
         
     } else {
         _refreshControl.hidden = NO;
