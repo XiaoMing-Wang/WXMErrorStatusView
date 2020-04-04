@@ -62,10 +62,15 @@ static char firstLoad;
         BOOL network = self.internetStatusnetwork;
         BOOL fail = self.requestFail;
         if (network == NO) {
+            
             [self showErrorStatusViewWithType:WXMErrorStatusTypeBadNetwork];
+            
         } else if (network && !fail) {
+            
             [self showErrorStatusViewWithType:WXMErrorStatusTypeNorecord];
+            
         }  else if (network && fail) {
+            
             [self showErrorStatusViewWithType:WXMErrorStatusTypeRequestFail];
         }
         self.requestFail = NO;
@@ -85,11 +90,13 @@ static char firstLoad;
     [self we_insertSections:sections withRowAnimation:animation];
     [self getDataSources];
 }
+
 - (void)we_deleteSections:(NSIndexSet *)sections
          withRowAnimation:(UITableViewRowAnimation)animation {
     [self we_deleteSections:sections withRowAnimation:animation];
     [self getDataSources];
 }
+
 - (void)we_reloadSections:(NSIndexSet *)sections
          withRowAnimation:(UITableViewRowAnimation)animation {
     [self we_reloadSections:sections withRowAnimation:animation];

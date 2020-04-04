@@ -14,15 +14,21 @@
 @interface UIView (WXMErrorStatusView)
 
 /** 全屏点击刷新 */
-@property (nonatomic, assign) BOOL fullScreenRefresh;
-@property (nonatomic, assign) BOOL sameSupViewColor;
+@property (nonatomic, assign) BOOL we_fullScreenRefresh;
+
+/** 背景颜色 */
+@property (nonatomic, strong) UIColor *we_backGroundColor;
+
+/** 文字 */
+@property (nonatomic, copy) NSString *we_errorNorecord;
+@property (nonatomic, copy) NSString *we_errorRequestFail;
+
+/** y轴偏移 */
+@property (nonatomic, assign) CGFloat we_yOffset;
 
 - (void)showErrorStatusViewWithType:(WXMErrorStatusType)errorType;
 - (void)showErrorStatusViewWithInterface:(WXMErrorStatusType)errorType;
 - (void)hidenErrorStatusView;
-
-/** 获取提示界面 */
-- (WXMErrorStatusView *)errorStatusView;
 
 /** 设置刷新回调 */
 - (void)we_setRefreshCallback:(void (^)(void))callback;
@@ -35,7 +41,12 @@
 @end
 
 @interface UIViewController (WXMErrorStatusView)
-@property (nonatomic, assign) BOOL fullScreenRefresh;
+@property (nonatomic, assign) CGFloat we_yOffset;
+@property (nonatomic, assign) BOOL we_fullScreenRefresh;
+@property (nonatomic, strong) UIColor *we_backGroundColor;
+@property (nonatomic, copy) NSString *we_errorNorecord;
+@property (nonatomic, copy) NSString *we_errorRequestFail;
+
 - (void)showErrorStatusViewWithType:(WXMErrorStatusType)errorType;
 - (void)showErrorStatusViewWithInterface:(WXMErrorStatusType)errorType;
 - (void)hidenErrorStatusView;

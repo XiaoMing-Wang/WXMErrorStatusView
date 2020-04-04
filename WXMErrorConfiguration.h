@@ -16,7 +16,7 @@
 #define WXM_ErrorSign 1020
 
 /** 无按钮垂直偏移 */
-#define WXM_Offset -35
+#define WXM_Offset -10
 
 /** 有按钮垂直偏移 */
 #define WXM_OffsetRefresh -35
