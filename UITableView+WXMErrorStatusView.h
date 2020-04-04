@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 自动管理空视图 默认NO */
 @property (nonatomic, assign) BOOL automaticManagement;
 
-/** 请求是否失败 */
+/** 请求是否失败 需要设置 */
 @property (nonatomic, assign) BOOL requestFail;
 
 /** 开始加载 */

@@ -56,9 +56,13 @@ static char firstLoad;
 /** 获取个数 */
 - (void)getDataSources {
     NSInteger tableCount = self.totalDataCount;
+    
     if (tableCount > 0) {
+        
         [self hidenErrorStatusView];
+        
     } else {
+        
         BOOL network = self.internetStatusnetwork;
         BOOL fail = self.requestFail;
         if (network == NO) {
@@ -73,11 +77,13 @@ static char firstLoad;
             
             [self showErrorStatusViewWithType:WXMErrorStatusTypeRequestFail];
         }
+        
         self.requestFail = NO;
     }
 }
 
 - (void)we_reloadData {
+    
     [self we_reloadData];
     id object = objc_getAssociatedObject(self, &firstLoad);
     if (self.automaticManagement && object) [self getDataSources];
