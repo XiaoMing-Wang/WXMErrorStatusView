@@ -101,7 +101,7 @@
         [_refreshControl setTitle:WXM_RefreshText forState:UIControlStateNormal];
         _refreshControl.layer.cornerRadius = WXM_RefreshCornerRadius;
         _refreshControl.layer.borderColor = WXM_RefreshTextcolor.CGColor;
-        _refreshControl.layer.borderWidth = 0.5;
+        _refreshControl.layer.borderWidth = 0.35;
         _refreshControl.titleLabel.font = [UIFont systemFontOfSize:12];
         _refreshControl.hidden = (_interfaceType != WXMErrorFaceTypeRefresh);
         [_refreshControl addTarget:self action:sel forControlEvents:UIControlEventTouchUpInside];
@@ -201,7 +201,7 @@
 }
 
 /** 结束刷新 */
-- (void)refreshControlStopAnimation:(BOOL)success {
+- (void)refreshControlStopSuccess:(BOOL)success {
     
     if (success) {
         
@@ -243,10 +243,8 @@
 }
 
 - (void)touchUpInside {
-    
-    if (self.callBack) self.callBack();
+    if (self.we_refreshCallback) self.we_refreshCallback();
     [self refreshControlStartAnimation];
-    
 }
 
 /** 设置类型 */

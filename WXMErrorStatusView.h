@@ -20,14 +20,13 @@
 
 /** 全屏点击刷新 */
 @property (nonatomic, assign) BOOL fullScreenRefresh;
-@property (nonatomic, copy) void (^callBack)(void);
 
 /** 最小高度 */
 + (CGFloat)minHeightWithType:(WXMErrorStatusInterfaceType)interfaceType;
 
 /** 刷新按钮 */
 - (void)refreshControlStartAnimation;
-- (void)refreshControlStopAnimation:(BOOL)success;
+- (void)refreshControlStopSuccess:(BOOL)success;
 
 /** 添加回调 */
 - (void)addTarget:(id)target selector:(SEL)sel;

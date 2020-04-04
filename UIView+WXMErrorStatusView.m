@@ -24,6 +24,7 @@
     error.we_errorNorecord = self.we_errorNorecord;
     error.we_yOffset = self.we_yOffset;
     error.we_backGroundColor = self.we_backGroundColor;
+    error.we_refreshCallback = self.we_refreshCallback;
     [self addSubview:error];
 }
 
@@ -37,6 +38,7 @@
     error.we_errorNorecord = self.we_errorNorecord;
     error.we_yOffset = self.we_yOffset;
     error.we_backGroundColor = self.we_backGroundColor;
+    error.we_refreshCallback = self.we_refreshCallback;
     [self addSubview:error];
 }
 
@@ -55,30 +57,29 @@
     return [self viewWithTag:WXM_ErrorSign];
 }
 
-- (void)we_setRefreshCallback:(void (^)(void))callback {
-    WXMErrorStatusView *errorView = self.errorStatusView;
-    [errorView setCallBack:[callback copy]];
-}
-
 - (void)we_addErrorStatusTarget:(id)target selector:(SEL)sel {
-    WXMErrorStatusView *errorView = self.errorStatusView;
-    [errorView addTarget:target selector:sel];
+    [self.errorStatusView addTarget:target selector:sel];
 }
 
 /** 开始刷新和刷新结果 */
 - (void)we_refreshControlStartAnimation {
-    WXMErrorStatusView *errorView = self.errorStatusView;
-    [errorView refreshControlStartAnimation];
+    [self.errorStatusView refreshControlStartAnimation];
 }
 
-- (void)we_refreshControlStopAnimation:(BOOL)success {
-    WXMErrorStatusView *errorView = self.errorStatusView;
-    [errorView we_refreshControlStopAnimation:success];
+- (void)we_refreshControlStopSuccess:(BOOL)success {
+    [self.errorStatusView refreshControlStopSuccess:success];
 }
 
 - (void)setWe_fullScreenRefresh:(BOOL)we_fullScreenRefresh {
-    WXMErrorStatusView *errorView = self.errorStatusView;
-    [errorView setFullScreenRefresh:we_fullScreenRefresh];
+    [self.errorStatusView setFullScreenRefresh:we_fullScreenRefresh];
+}
+
+- (void)setWe_refreshCallback:(void (^)(void))we_refreshCallback {
+    objc_setAssociatedObject(self, @selector(we_refreshCallback), we_refreshCallback, 3);
+}
+
+- (void (^)(void))we_refreshCallback {
+    return objc_getAssociatedObject(self, _cmd);
 }
 
 - (void)setWe_errorNorecord:(NSString *)we_errorNorecord {
@@ -121,6 +122,7 @@
 @dynamic we_backGroundColor;
 @dynamic we_errorNorecord;
 @dynamic we_errorRequestFail;
+@dynamic we_refreshCallback;
 
 - (void)showErrorStatusViewWithType:(WXMErrorStatusType)errorType {
     [self.view showErrorStatusViewWithType:errorType];
@@ -134,14 +136,6 @@
     [self.view hidenErrorStatusView];
 }
 
-- (WXMErrorStatusView *)errorStatusView {
-    return [self.view viewWithTag:WXM_ErrorSign];
-}
-
-- (void)we_setRefreshCallback:(void (^)(void))callback {
-    [self.view we_setRefreshCallback:callback];
-}
-
 - (void)we_addErrorStatusTarget:(id)target selector:(SEL)sel {
     [self.view we_addErrorStatusTarget:target selector:sel];
 }
@@ -150,8 +144,8 @@
     [self.view we_refreshControlStartAnimation];
 }
 
-- (void)we_refreshControlStopAnimation:(BOOL)success {
-    [self.view we_refreshControlStopAnimation:success];
+- (void)we_refreshControlStopSuccess:(BOOL)success {
+    [self.view we_refreshControlStopSuccess:success];
 }
 
 - (void)setWe_fullScreenRefresh:(BOOL)we_fullScreenRefresh {
@@ -172,6 +166,10 @@
 
 - (void)setWe_yOffset:(CGFloat)we_yOffset {
     self.view.we_yOffset = we_yOffset;
+}
+
+- (void)setWe_refreshCallback:(void (^)(void))we_refreshCallback {
+    self.view.we_refreshCallback = we_refreshCallback;
 }
 
 @end

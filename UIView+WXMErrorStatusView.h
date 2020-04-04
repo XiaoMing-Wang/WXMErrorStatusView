@@ -26,17 +26,17 @@
 /** y轴偏移 */
 @property (nonatomic, assign) CGFloat we_yOffset;
 
+/** 点击block */
+@property (nonatomic, copy) void (^we_refreshCallback) (void);
+
 - (void)showErrorStatusViewWithType:(WXMErrorStatusType)errorType;
 - (void)showErrorStatusViewWithInterface:(WXMErrorStatusType)errorType;
 - (void)hidenErrorStatusView;
 
 /** 设置刷新回调 */
-- (void)we_setRefreshCallback:(void (^)(void))callback;
 - (void)we_addErrorStatusTarget:(id)target selector:(SEL)sel;
-
-/** 开始刷新和刷新结果 */
 - (void)we_refreshControlStartAnimation;
-- (void)we_refreshControlStopAnimation:(BOOL)success;
+- (void)we_refreshControlStopSuccess:(BOOL)success;
 
 @end
 
@@ -46,14 +46,13 @@
 @property (nonatomic, strong) UIColor *we_backGroundColor;
 @property (nonatomic, copy) NSString *we_errorNorecord;
 @property (nonatomic, copy) NSString *we_errorRequestFail;
+@property (nonatomic, copy) void (^we_refreshCallback) (void);
 
 - (void)showErrorStatusViewWithType:(WXMErrorStatusType)errorType;
 - (void)showErrorStatusViewWithInterface:(WXMErrorStatusType)errorType;
 - (void)hidenErrorStatusView;
 
-- (WXMErrorStatusView *)errorStatusView;
-- (void)we_setRefreshCallback:(void (^)(void))callback;
 - (void)we_addErrorStatusTarget:(id)target selector:(SEL)sel;
 - (void)we_refreshControlStartAnimation;
-- (void)we_refreshControlStopAnimation:(BOOL)success;
+- (void)we_refreshControlStopSuccess:(BOOL)success;
 @end
